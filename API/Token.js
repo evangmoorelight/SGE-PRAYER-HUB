@@ -1,7 +1,12 @@
-const { RtcTokenBuilder, RtcRole } = require("agora-access-token");
+const {
+  RtcTokenBuilder,
+  RtcRole
+} = require("agora-access-token");
 
-module.exports = async (req, res) => {
-  // Only allow POST requests
+module.exports = function handler(req, res) {
+
+  res.setHeader("Content-Type", "application/json");
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
@@ -9,10 +14,21 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const {
-      channelName,
-      uid
-    } = req.body || {};
+
+    const appId = process.env.AGORA_APP_ID;
+    const appCertificate =
+      process.env.AGORA_APP_CERTIFICATE;
+
+    if (!appId || !appCertificate) {
+      return res.status(500).json({
+        error: "Agora environment variables are missing"
+      });
+    }
+
+    const body = req.body || {};
+
+    const channelName = body.channelName;
+    const uid = Number(body.uid);
 
     if (!channelName) {
       return res.status(400).json({
@@ -20,46 +36,42 @@ module.exports = async (req, res) => {
       });
     }
 
-    const appId = process.env.AGORA_APP_ID;
-    const appCertificate = process.env.AGORA_APP_CERTIFICATE;
+    const userUid =
+      Number.isFinite(uid) && uid > 0
+        ? uid
+        : Math.floor(Math.random() * 1000000000);
 
-    if (!appId || !appCertificate) {
-      return res.status(500).json({
-        error: "Agora environment variables are not configured"
-      });
-    }
+    const expirationSeconds = 3600;
 
-    const userId = Number(uid) || Math.floor(Math.random() * 1000000000);
-
-    // Token expires in 1 hour
-    const expirationTimeInSeconds = 3600;
-
-    const currentTimestamp = Math.floor(Date.now() / 1000);
     const privilegeExpiredTs =
-      currentTimestamp + expirationTimeInSeconds;
+      Math.floor(Date.now() / 1000) +
+      expirationSeconds;
 
-    const token = RtcTokenBuilder.buildTokenWithUid(
-      appId,
-      appCertificate,
-      channelName,
-      userId,
-      RtcRole.PUBLISHER,
-      privilegeExpiredTs
-    );
+    const token =
+      RtcTokenBuilder.buildTokenWithUid(
+        appId,
+        appCertificate,
+        channelName,
+        userUid,
+        RtcRole.PUBLISHER,
+        privilegeExpiredTs
+      );
 
     return res.status(200).json({
-      token,
-      appId,
-      channelName,
-      uid: userId,
+      token: token,
+      appId: appId,
+      channelName: channelName,
+      uid: userUid,
       expiresAt: privilegeExpiredTs
     });
 
   } catch (error) {
-    console.error("Token generation error:", error);
+
+    console.error(error);
 
     return res.status(500).json({
-      error: "Unable to generate Agora token"
+      error: "Token generation failed",
+      message: error.message
     });
   }
 };
