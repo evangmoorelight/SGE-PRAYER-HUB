@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "agora-token": "^2.0.0"
+    "agora-access-token": "^2.0.4"
   }
 }
