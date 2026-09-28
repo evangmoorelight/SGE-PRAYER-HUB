@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>SGE PRAYER HUB</title>
+
+  <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0b1220;
+      color: white;
+    }
+
+    header {
+      padding: 22px 18px;
+      text-align: center;
+      background: #111c31;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    header h1 {
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    header p {
+      margin-top: 7px;
+      color: #9caac0;
+      font-size: 14px;
+    }
+
+    .container {
+      width: min(94%, 620px);
+      margin: 30px auto;
+    }
+
+    .card {
+      background: #111c31;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.25);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #aebbd0;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #293750;
+      border-radius: 12px;
+      background: #09101d;
+      color: white;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    input:focus {
+      border-color: #1687ff;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: #1687ff;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #09101d;
+      color: #aebbd0;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .room {
+      display: none;
+    }
+
+    .room.active {
+      display: block;
+    }
+
+    .participants {
+      margin-top: 20px;
+    }
+
+    .participant {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background: #09101d;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .controls button {
+      background: #1b2b46;
+    }
+
+    .controls .leave {
+      background: #d92d45;
+    }
+
+    .live {
+      color: #43e97b;
+      font-weight: 700;
+    }
+
+    .error {
+      color: #ff6b81;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>SGE PRAYER HUB</h1>
+  <p>Connect • Pray • Believe • Grow</p>
+</header>
+
+<div class="container">
+
+  <div id="joinCard" class="card">
+
+    <label for="name">Your Name</label>
+
+    <input
+      id="name"
+      type="text"
+      placeholder="Enter your name"
+      maxlength="30"
+    >
+
+    <label for="roomName">Prayer Room</label>
+
+    <input
+      id="roomName"
+      type="text"
+      placeholder="Example: Morning Prayer"
+      maxlength="50"
+    >
+
+    <button onclick="joinRoom()">
+      🎙️ Join Prayer Room
+    </button>
+
+    <div id="status" class="status">
+      Ready to join
+    </div>
+
+  </div>
+
+
+  <div id="room" class="card room">
+
+    <h2 id="roomTitle">Prayer Room</h2>
+
+    <p style="margin-top:8px;">
+      <span class="live">● LIVE</span>
+    </p>
+
+    <div class="participants">
+
+      <h3 style="margin-bottom:12px;">
+        Participants
+      </h3>
+
+      <div id="participantList"></div>
+
+    </div>
+
+    <div class="controls">
+
+      <button onclick="toggleMute()" id="muteButton">
+        🎤 Mute
+      </button>
+
+      <button onclick="leaveRoom()" class="leave">
+        🚪 Leave
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const APP_ID =
+  "aaaf093cb1944721bf39fb62659394a2";
+
+let client = null;
+let localAudioTrack = null;
+let currentChannel = null;
+let currentUid = null;
+let muted = false;
+
+
+function setStatus(message, error = false) {
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent = message;
+
+  status.className =
+    error ? "status error" : "status";
+}
+
+
+async function getToken(channelName, uid) {
+
+  const response = await fetch("/api/token", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      channelName,
+      uid
+    })
+
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.error || "Token request failed"
+    );
+  }
+
+  return data;
+}
+
+
+async function joinRoom() {
+
+  const name =
+    document.getElementById("name")
+      .value.trim();
+
+  const roomName =
+    document.getElementById("roomName")
+      .value.trim();
+
+  if (!name) {
+    setStatus("Please enter your name.", true);
+    return;
+  }
+
+  if (!roomName) {
+    setStatus("Please enter a prayer room.", true);
+    return;
+  }
+
+  try {
+
+    setStatus("Connecting to prayer room...");
+
+    currentChannel =
+      roomName
+        .replace(/[^a-zA-Z0-9_-]/g, "-")
+        .substring(0, 50);
+
+    currentUid =
+      Math.floor(Math.random() * 1000000000);
+
+    const tokenData =
+      await getToken(
+        currentChannel,
+        currentUid
+      );
+
+    client =
+      AgoraRTC.createClient({
+        mode: "rtc",
+        codec: "vp8"
+      });
+
+    client.on(
+      "user-published",
+      async (user, mediaType) => {
+
+        await client.subscribe(
+          user,
+          mediaType
+        );
+
+        if (mediaType === "audio") {
+
+          const remoteTrack =
+            user.audioTrack;
+
+          remoteTrack.play();
+        }
+
+        addParticipant(
+          user.uid
+        );
+      }
+    );
+
+    client.on(
+      "user-unpublished",
+      (user) => {
+
+        removeParticipant(
+          user.uid
+        );
+      }
+    );
+
+    await client.join(
+      APP_ID,
+      currentChannel,
+      tokenData.token,
+      currentUid
+    );
+
+    localAudioTrack =
+      await AgoraRTC.createMicrophoneAudioTrack();
+
+    await client.publish(
+      [localAudioTrack]
+    );
+
+    document.getElementById(
+      "joinCard"
+    ).style.display = "none";
+
+    document.getElementById(
+      "room"
+    ).classList.add("active");
+
+    document.getElementById(
+      "roomTitle"
+    ).textContent =
+      roomName;
+
+    addParticipant(
+      name,
+      true
+    );
+
+    setStatus("Connected");
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      error.message ||
+      "Unable to join prayer room.",
+      true
+    );
+  }
+}
+
+
+function addParticipant(
+  value,
+  local = false
+) {
+
+  const list =
+    document.getElementById(
+      "participantList"
+    );
+
+  const id =
+    "participant-" +
+    String(value)
+      .replace(/[^a-zA-Z0-9]/g, "");
+
+  if (
+    document.getElementById(id)
+  ) {
+    return;
+  }
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "participant";
+
+  div.id = id;
+
+  div.textContent =
+    local
+      ? "🎤 " + value + " (You)"
+      : "🎤 Participant " + value;
+
+  list.appendChild(div);
+}
+
+
+function removeParticipant(uid) {
+
+  const id =
+    "participant-" +
+    String(uid)
+      .replace(/[^a-zA-Z0-9]/g, "");
+
+  const element =
+    document.getElementById(id);
+
+  if (element) {
+    element.remove();
+  }
+}
+
+
+async function toggleMute() {
+
+  if (!localAudioTrack) {
+    return;
+  }
+
+  muted = !muted;
+
+  await localAudioTrack.setEnabled(
+    !muted
+  );
+
+  document.getElementById(
+    "muteButton"
+  ).textContent =
+    muted
+      ? "🔇 Unmute"
+      : "🎤 Mute";
+}
+
+
+async function leaveRoom() {
+
+  try {
+
+    if (localAudioTrack) {
+
+      localAudioTrack.stop();
+
+      localAudioTrack.close();
+
+      localAudioTrack = null;
+    }
+
+    if (client) {
+
+      await client.leave();
+
+      client = null;
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+  } finally {
+
+    document.getElementById(
+      "room"
+    ).classList.remove("active");
+
+    document.getElementById(
+      "joinCard"
+    ).style.display = "block";
+
+    document.getElementById(
+      "participantList"
+    ).innerHTML = "";
+
+    setStatus(
+      "You have left the prayer room."
+    );
+  }
+}
+
+</script>
+
+</body>
+</html>
