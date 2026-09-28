@@ -1,0 +1,9 @@
+{
+  "name": "sge-prayer-hub",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "agora-access-token": "^2.0.4"
+  }
+}
+
