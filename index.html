@@ -1,1442 +1,1060 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SGE PRAYER HUB</title><script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script><style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: white;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #123d70 0%,
+      #071a33 45%,
+      #020b18 100%
+    );
+
+  padding: 20px 12px 40px;
+}
+
+.container {
+  width: min(94%, 620px);
+  margin: auto;
+}
+
+/* =========================
+   PASSWORD GATE
+========================= */
+
+#passwordGate {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: fixed;
+  inset: 0;
+
+  z-index: 99999;
+
+  padding: 20px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #123d70 0%,
+      #071a33 48%,
+      #020b18 100%
+    );
+}
+
+.password-box {
+  width: min(100%, 430px);
+
+  background: rgba(10, 28, 50, 0.94);
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  border-radius: 24px;
+
+  padding: 30px 24px;
+
+  text-align: center;
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.5);
+
+  backdrop-filter: blur(16px);
+}
+
+.password-logo {
+  width: 95px;
+  height: 95px;
+
+  object-fit: contain;
+
+  display: block;
+
+  margin: 0 auto 18px;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.04);
+
+  filter:
+    drop-shadow(0 0 15px rgba(22,135,255,0.5));
+}
+
+.password-box h1 {
+  font-size: 27px;
+
+  font-weight: 800;
+
+  margin-bottom: 8px;
+}
+
+.password-box p {
+  color: #a9c8e8;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  margin-bottom: 22px;
+}
+
+.password-input {
+  width: 100%;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  background: rgba(0,0,0,0.28);
+
+  color: white;
+
+  outline: none;
+
+  font-size: 16px;
+
+  text-align: center;
+
+  margin-bottom: 12px;
+}
+
+.password-input:focus {
+  border-color: #1687ff;
+
+  box-shadow:
+    0 0 0 3px rgba(22,135,255,0.12);
+}
+
+.password-input::placeholder {
+  color: #7890a8;
+}
+
+.password-button {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 15px;
+
+  background: #1687ff;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px rgba(22,135,255,0.3);
+}
+
+.password-button:active {
+  transform: scale(0.98);
+}
+
+#passwordMessage {
+  min-height: 20px;
+
+  margin-top: 12px;
+
+  font-size: 13px;
+
+  color: #ff8585;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  text-align: center;
+  padding: 20px 10px 25px;
+}
+
+.site-logo {
+  width: 100px;
+  height: 100px;
+
+  object-fit: contain;
+
+  display: block;
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  filter:
+    drop-shadow(0 0 12px rgba(22,135,255,0.45));
+
+  background: rgba(255,255,255,0.04);
+}
+
+header h1 {
+  font-size: clamp(28px, 7vw, 42px);
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+header p {
+  color: #a9c8e8;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: rgba(10,28,50,0.88);
+
+  border: 1px solid rgba(255,255,255,0.09);
+
+  border-radius: 20px;
+
+  padding: 22px;
+
+  margin-bottom: 18px;
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.35);
+
+  backdrop-filter: blur(12px);
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-group {
+  margin-bottom: 14px;
+}
+
+.input-group label {
+  display: block;
+
+  font-size: 13px;
+
+  color: #a9c8e8;
+
+  margin-bottom: 7px;
+}
+
+input {
+  width: 100%;
+
+  padding: 14px 15px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  background: rgba(0,0,0,0.25);
+
+  color: white;
+
+  outline: none;
+
+  font-size: 15px;
+}
+
+input:focus {
+  border-color: #1687ff;
+
+  box-shadow:
+    0 0 0 3px rgba(22,135,255,0.12);
+}
+
+input::placeholder {
+  color: #7890a8;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 14px 16px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.primary-button {
+  background: #1687ff;
+
+  color: white;
+
+  margin-top: 4px;
+
+  box-shadow:
+    0 8px 20px rgba(22,135,255,0.25);
+}
+
+.primary-button:hover {
+  opacity: 0.92;
+}
+
+.secondary-button {
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  margin-top: 10px;
+}
+
+.danger-button {
+  background: #c62828;
+
+  color: white;
+
+  margin-top: 10px;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+#status {
+  text-align: center;
+
+  margin-top: 14px;
+
+  color: #9fc5e8;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+/* =========================
+   ROOM
+========================= */
+
+#roomCard {
+  display: none;
+}
+
+.room-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+.room-title {
+  font-size: 22px;
+
+  font-weight: 800;
+
+  word-break: break-word;
+}
+
+.live-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  background: rgba(255,40,40,0.12);
+
+  border: 1px solid rgba(255,70,70,0.25);
+
+  color: #ff8585;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+
+  background: #ff4545;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 8px #ff4545;
+}
+
+.connection {
+  text-align: center;
+
+  color: #8fb7db;
+
+  font-size: 13px;
+
+  margin-bottom: 18px;
+}
+
+/* =========================
+   PARTICIPANTS
+========================= */
+
+.participants-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.participants-header h3 {
+  font-size: 16px;
+}
+
+#participantCount {
+  background: rgba(22,135,255,0.15);
+
+  color: #69b5ff;
+
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+#participantList {
+  list-style: none;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.participant {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 11px 12px;
+
+  background: rgba(255,255,255,0.045);
+
+  border-radius: 11px;
+
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.participant-avatar {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #1687ff;
+
+  color: white;
+
+  font-weight: 800;
+
+  font-size: 13px;
+}
+
+.participant-name {
+  flex: 1;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+}
+
+.you-badge {
+  color: #69b5ff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+  margin-top: 18px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  text-align: center;
+
+  color: #58738f;
+
+  font-size: 12px;
+
+  padding: 12px 5px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:480px) {
+
+  body {
+    padding-top: 10px;
+  }
+
+  header {
+    padding-top: 15px;
+  }
+
+  .site-logo {
+    width: 85px;
+    height: 85px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 17px;
+  }
+
+  .room-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .live-badge {
+    align-self: flex-start;
+  }
+
+  .password-box {
+    padding: 26px 20px;
+  }
+
+  .password-logo {
+    width: 85px;
+    height: 85px;
+  }
+}
+</style></head><body><!-- =====================================================
+     ADMIN PASSWORD GATE
+===================================================== --><div id="passwordGate">  <div class="password-box"><img
+  src="kblc-logo.png"
+  alt="KBLC Logo"
+  class="password-logo"
+>
+
+<h1>SGE PRAYER HUB</h1>
+
+<p>
+  Enter the admin password to access the prayer hub.
+</p>
+
+<input
+  id="adminPassword"
+  class="password-input"
+  type="password"
+  placeholder="Enter admin password"
+  autocomplete="off"
+  onkeydown="handlePasswordKey(event)"
+>
+
+<button
+  class="password-button"
+  onclick="checkAdminPassword()"
+>
+  🔐 Enter Prayer Hub
+</button>
+
+<div id="passwordMessage"></div>
+
+  </div></div><!-- =====================================================
+     MAIN WEBSITE
+===================================================== --><div
+  class="container"
+  id="mainSite"
+  style="display:none;"
+><header><img
+src="kblc-logo.png"
+alt="KBLC Logo"
+class="site-logo"
 
 «»
 
-  <title>SGE PRAYER HUB</title>  <!-- Agora RTC SDK -->  <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: white;
-
-      background:
-        radial-gradient(
-          circle at top,
-          #123d70 0%,
-          #071a33 45%,
-          #020b18 100%
-        );
-
-      padding: 20px 12px 40px;
-    }
-
-    .container {
-      width: min(94%, 620px);
-      margin: auto;
-    }
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    header {
-      text-align: center;
-      padding: 20px 10px 25px;
-    }
-
-    .site-logo {
-      width: 100px;
-      height: 100px;
-
-      object-fit: contain;
-
-      display: block;
-      margin: 0 auto 15px;
-
-      border-radius: 50%;
-
-      filter:
-        drop-shadow(0 0 12px rgba(22, 135, 255, 0.45));
-
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    header h1 {
-      font-size: clamp(28px, 7vw, 42px);
-      font-weight: 800;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    header p {
-      color: #a9c8e8;
-      font-size: 15px;
-      letter-spacing: 1px;
-    }
-
-    /* =========================
-       CARDS
-    ========================= */
-
-    .card {
-      background: rgba(10, 28, 50, 0.88);
-
-      border: 1px solid rgba(255, 255, 255, 0.09);
-
-      border-radius: 20px;
-
-      padding: 22px;
-
-      margin-bottom: 18px;
-
-      box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.35);
-
-      backdrop-filter: blur(12px);
-    }
-
-    .card h2 {
-      font-size: 20px;
-      margin-bottom: 16px;
-    }
-
-    /* =========================
-       INPUTS
-    ========================= */
-
-    .input-group {
-      margin-bottom: 14px;
-    }
-
-    .input-group label {
-      display: block;
-
-      font-size: 13px;
-
-      color: #a9c8e8;
-
-      margin-bottom: 7px;
-    }
-
-    input {
-      width: 100%;
-
-      padding: 14px 15px;
-
-      border-radius: 12px;
-
-      border: 1px solid rgba(255, 255, 255, 0.12);
-
-      background: rgba(0, 0, 0, 0.25);
-
-      color: white;
-
-      outline: none;
-
-      font-size: 15px;
-    }
-
-    input:focus {
-      border-color: #1687ff;
-
-      box-shadow:
-        0 0 0 3px rgba(22, 135, 255, 0.12);
-    }
-
-    input::placeholder {
-      color: #7890a8;
-    }
-
-    /* =========================
-       BUTTONS
-    ========================= */
-
-    button {
-      width: 100%;
-
-      border: none;
-
-      border-radius: 12px;
-
-      padding: 14px 16px;
-
-      font-size: 15px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .primary-button {
-      background: #1687ff;
-
-      color: white;
-
-      margin-top: 4px;
-
-      box-shadow:
-        0 8px 20px rgba(22, 135, 255, 0.25);
-    }
-
-    .primary-button:hover {
-      opacity: 0.92;
-    }
-
-    .secondary-button {
-      background: rgba(255, 255, 255, 0.08);
-
-      color: white;
-
-      border: 1px solid rgba(255, 255, 255, 0.1);
-
-      margin-top: 10px;
-    }
-
-    .danger-button {
-      background: #c62828;
-
-      color: white;
-
-      margin-top: 10px;
-    }
-
-    /* =========================
-       STATUS
-    ========================= */
-
-    #status {
-      text-align: center;
-
-      margin-top: 14px;
-
-      color: #9fc5e8;
-
-      font-size: 14px;
-
-      line-height: 1.5;
-    }
-
-    /* =========================
-       ROOM
-    ========================= */
-
-    #roomCard {
-      display: none;
-    }
-
-    .room-header {
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin-bottom: 16px;
-    }
-
-    .room-title {
-      font-size: 22px;
-
-      font-weight: 800;
-
-      word-break: break-word;
-    }
-
-    .live-badge {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      background: rgba(255, 40, 40, 0.12);
-
-      border: 1px solid rgba(255, 70, 70, 0.25);
-
-      color: #ff8585;
-
-      padding: 6px 10px;
-
-      border-radius: 999px;
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      white-space: nowrap;
-    }
-
-    .live-dot {
-      width: 7px;
-      height: 7px;
-
-      background: #ff4545;
-
-      border-radius: 50%;
-
-      box-shadow:
-        0 0 8px #ff4545;
-    }
-
-    .connection {
-      text-align: center;
-
-      color: #8fb7db;
-
-      font-size: 13px;
-
-      margin-bottom: 18px;
-    }
-
-    /* =========================
-       PARTICIPANTS
-    ========================= */
-
-    .participants-header {
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      margin-bottom: 10px;
-    }
-
-    .participants-header h3 {
-      font-size: 16px;
-    }
-
-    #participantCount {
-      background: rgba(22, 135, 255, 0.15);
-
-      color: #69b5ff;
-
-      padding: 5px 9px;
-
-      border-radius: 999px;
-
-      font-size: 12px;
-
-      font-weight: 700;
-    }
-
-    #participantList {
-      list-style: none;
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 8px;
-    }
-
-    .participant {
-      display: flex;
-
-      align-items: center;
-
-      gap: 10px;
-
-      padding: 11px 12px;
-
-      background: rgba(255, 255, 255, 0.045);
-
-      border-radius: 11px;
-
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .participant-avatar {
-      width: 34px;
-      height: 34px;
-
-      border-radius: 50%;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      background: #1687ff;
-
-      color: white;
-
-      font-weight: 800;
-
-      font-size: 13px;
-    }
-
-    .participant-name {
-      flex: 1;
-
-      font-size: 14px;
-
-      font-weight: 600;
-
-      word-break: break-word;
-    }
-
-    .you-badge {
-      color: #69b5ff;
-
-      font-size: 11px;
-
-      font-weight: 700;
-    }
-
-    /* =========================
-       CONTROLS
-    ========================= */
-
-    .controls {
-      margin-top: 18px;
-    }
-
-    /* =========================
-       FOOTER
-    ========================= */
-
-    footer {
-      text-align: center;
-
-      color: #58738f;
-
-      font-size: 12px;
-
-      padding: 12px 5px;
-    }
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 480px) {
-
-      body {
-        padding-top: 10px;
-      }
-
-      header {
-        padding-top: 15px;
-      }
-
-      .site-logo {
-        width: 85px;
-        height: 85px;
-      }
-
-      .card {
-        padding: 18px;
-        border-radius: 17px;
-      }
-
-      .room-header {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .live-badge {
-        align-self: flex-start;
-      }
-    }
-  </style></head><body>  <div class="container"><!-- =========================
-     HEADER
-========================= -->
-
-<header>
-
-  <!-- KBLC LOGO -->
-  <img
-    src="kblc-logo.png"
-    alt="KBLC Logo"
-    class="site-logo"
-  >
-
-  <h1>SGE PRAYER HUB</h1>
-
-  <p>Connect • Pray • Believe • Grow</p>
-
-</header>
-
-
-<!-- =========================
-     JOIN CARD
-========================= -->
-
-<section class="card" id="joinCard">
-
-  <h2>Join Prayer Room</h2>
-
-  <div class="input-group">
-
-    <label for="name">
-      Your Name
-    </label>
-
-    <input
-      id="name"
-      type="text"
-      placeholder="Enter your name"
-      maxlength="40"
-      autocomplete="name"
-    >
-
-  </div>
-
-
-  <div class="input-group">
-
-    <label for="roomName">
-      Prayer Room
-    </label>
-
-    <input
-      id="roomName"
-      type="text"
-      placeholder="Example: Morning Prayer"
-      maxlength="50"
-    >
-
-  </div>
-
-
-  <button
-    class="primary-button"
-    id="joinButton"
-    onclick="joinRoom()"
-  >
-    🎙️ Join Prayer Room
-  </button>
-
-
-  <div id="status">
+  <h1>SGE PRAYER HUB</h1>  <p>Connect • Pray • Believe • Grow</p></header><section class="card" id="joinCard">  <h2>Join Prayer Room</h2>  <div class="input-group"><label for="name">
+  Your Name
+</label>
+
+<input
+  id="name"
+  type="text"
+  placeholder="Enter your name"
+  maxlength="40"
+  autocomplete="name"
+>
+
+  </div>  <div class="input-group"><label for="roomName">
+  Prayer Room
+</label>
+
+<input
+  id="roomName"
+  type="text"
+  placeholder="Example: Morning Prayer"
+  maxlength="50"
+>
+
+  </div><button
+class="primary-button"
+id="joinButton"
+onclick="joinRoom()"
+
+«»
+
+🎙️ Join Prayer Room
+
+  </button>  <div id="status">
     Enter your name and prayer room to join.
-  </div>
+  </div></section><section class="card" id="roomCard">  <div class="room-header"><div
+  class="room-title"
+  id="roomTitle"
+>
+  Prayer Room
+</div>
 
-</section>
+<div class="live-badge">
 
+  <span class="live-dot"></span>
 
-<!-- =========================
-     ROOM CARD
-========================= -->
+  LIVE
 
-<section class="card" id="roomCard">
+</div>
 
-  <div class="room-header">
-
-    <div
-      class="room-title"
-      id="roomTitle"
-    >
-      Prayer Room
-    </div>
-
-    <div class="live-badge">
-      <span class="live-dot"></span>
-      LIVE
-    </div>
-
-  </div>
-
-
-  <div
+  </div>  <div
     class="connection"
     id="connectionStatus"
   >
     Connecting...
-  </div>
+  </div>  <div class="participants-header"><h3>
+  🙏 People in Prayer
+</h3>
+
+<span id="participantCount">
+  0
+</span>
+
+  </div>  <ul id="participantList"></ul>  <div class="controls"><button
+  class="secondary-button"
+  id="muteButton"
+  onclick="toggleMute()"
+>
+  🔇 Mute Microphone
+</button>
 
 
-  <!-- PARTICIPANTS -->
+<button
+  class="danger-button"
+  onclick="leaveRoom()"
+>
+  🚪 Leave Prayer Room
+</button>
 
-  <div class="participants-header">
-
-    <h3>
-      🙏 People in Prayer
-    </h3>
-
-    <span id="participantCount">
-      0
-    </span>
-
-  </div>
-
-
-  <ul id="participantList"></ul>
-
-
-  <!-- CONTROLS -->
-
-  <div class="controls">
-
-    <button
-      class="secondary-button"
-      id="muteButton"
-      onclick="toggleMute()"
-    >
-      🔇 Mute Microphone
-    </button>
-
-
-    <button
-      class="danger-button"
-      onclick="leaveRoom()"
-    >
-      🚪 Leave Prayer Room
-    </button>
-
-  </div>
-
-</section>
-
-
-<footer>
+  </div></section><footer>
   SGE PRAYER HUB • Connect • Pray • Believe • Grow
-</footer>
+</footer></div><script>
 
-  </div>  <script>
+/* =====================================================
+   ADMIN PASSWORD
+===================================================== */
 
-    /* =========================================
-       AGORA CONFIGURATION
-    ========================================= */
-
-    const APP_ID =
-      "aaaf093cb1944721bf39fb62659394a2";
+const ADMIN_PASSWORD = "kbnation";
 
 
-    /* =========================================
-       GLOBAL VARIABLES
-    ========================================= */
+/* =====================================================
+   PASSWORD CHECK
+===================================================== */
 
-    let client = null;
+function checkAdminPassword() {
 
-    let localAudioTrack = null;
+  const password =
+    document.getElementById(
+      "adminPassword"
+    ).value;
 
-    let currentChannel = "";
-
-    let currentUid = null;
-
-    let currentName = "";
-
-    let muted = false;
-
-
-    /* =========================================
-       STATUS
-    ========================================= */
-
-    function setStatus(message) {
-
-      document.getElementById("status").textContent =
-        message;
-
-    }
+  const message =
+    document.getElementById(
+      "passwordMessage"
+    );
 
 
-    /* =========================================
-       CREATE ROOM NAME
-    ========================================= */
+  if (password === ADMIN_PASSWORD) {
 
-    function createChannelName(roomName) {
+    /*
+      Hide password screen
+    */
 
-      return roomName
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-zA-Z0-9_-]/g, "")
-        .substring(0, 50);
-
-    }
+    document.getElementById(
+      "passwordGate"
+    ).style.display = "none";
 
 
-    /* =========================================
-       CREATE UNIQUE UID
-    ========================================= */
+    /*
+      Show website
+    */
 
-    function createUid() {
-
-      return Math.floor(
-        100000000 +
-        Math.random() * 900000000
-      );
-
-    }
+    document.getElementById(
+      "mainSite"
+    ).style.display = "block";
 
 
-    /* =========================================
-       GET AGORA TOKEN
-    ========================================= */
+    /*
+      Clear password field
+    */
 
-    async function getToken(channelName, uid) {
-
-      const response = await fetch(
-        "/api/token",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            channelName: channelName,
-            uid: uid
-          })
-        }
-      );
+    document.getElementById(
+      "adminPassword"
+    ).value = "";
 
 
-      if (!response.ok) {
+    message.textContent = "";
 
-        throw new Error(
-          "Token server returned HTTP " +
-          response.status
-        );
+  } else {
 
+    message.textContent =
+      "Incorrect password. Please try again.";
+
+    document.getElementById(
+      "adminPassword"
+    ).value = "";
+
+    document.getElementById(
+      "adminPassword"
+    ).focus();
+
+  }
+
+}
+
+
+/* =====================================================
+   ENTER KEY FOR PASSWORD
+===================================================== */
+
+function handlePasswordKey(event) {
+
+  if (event.key === "Enter") {
+
+    checkAdminPassword();
+
+  }
+
+}
+
+
+/* =====================================================
+   AGORA CONFIGURATION
+===================================================== */
+
+const APP_ID =
+  "aaaf093cb1944721bf39fb62659394a2";
+
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let client = null;
+
+let localAudioTrack = null;
+
+let currentChannel = "";
+
+let currentUid = null;
+
+let currentName = "";
+
+let muted = false;
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(message) {
+
+  document.getElementById(
+    "status"
+  ).textContent = message;
+
+}
+
+
+/* =====================================================
+   CREATE ROOM NAME
+===================================================== */
+
+function createChannelName(roomName) {
+
+  return roomName
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-zA-Z0-9_-]/g, "")
+    .substring(0, 50);
+
+}
+
+
+/* =====================================================
+   CREATE UNIQUE UID
+===================================================== */
+
+function createUid() {
+
+  return Math.floor(
+    100000000 +
+    Math.random() * 900000000
+  );
+
+}
+
+
+/* =====================================================
+   GET AGORA TOKEN
+===================================================== */
+
+async function getToken(
+  channelName,
+  uid
+) {
+
+  const response =
+    await fetch(
+      "/api/token",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          channelName:
+            channelName,
+
+          uid: uid
+        })
       }
+    );
 
 
-      const data =
-        await response.json();
+  if (!response.ok) {
 
+    throw new Error(
+      "Token server returned HTTP " +
+      response.status
+    );
 
-      if (!data.token) {
+  }
 
-        throw new Error(
-          "No Agora token was returned by /api/token"
-        );
 
-      }
+  const data =
+    await response.json();
 
 
-      return data.token;
+  if (!data.token) {
 
-    }
+    throw new Error(
+      "No Agora token was returned by /api/token"
+    );
 
+  }
 
-    /* =========================================
-       JOIN ROOM
-    ========================================= */
 
-    async function joinRoom() {
+  return data.token;
 
-      const nameInput =
-        document.getElementById("name");
+}
 
-      const roomInput =
-        document.getElementById("roomName");
 
+/* =====================================================
+   JOIN ROOM
+===================================================== */
 
-      currentName =
-        nameInput.value.trim();
+async function joinRoom() {
 
+  const nameInput =
+    document.getElementById("name");
 
-      const enteredRoom =
-        roomInput.value.trim();
+  const roomInput =
+    document.getElementById("roomName");
 
 
-      if (!currentName) {
+  currentName =
+    nameInput.value.trim();
 
-        setStatus(
-          "Please enter your name."
-        );
 
-        nameInput.focus();
+  const enteredRoom =
+    roomInput.value.trim();
 
-        return;
 
-      }
+  if (!currentName) {
 
+    setStatus(
+      "Please enter your name."
+    );
 
-      if (!enteredRoom) {
+    nameInput.focus();
 
-        setStatus(
-          "Please enter a prayer room name."
-        );
+    return;
 
-        roomInput.focus();
+  }
 
-        return;
 
-      }
+  if (!enteredRoom) {
 
+    setStatus(
+      "Please enter a prayer room name."
+    );
 
-      currentChannel =
-        createChannelName(
-          enteredRoom
-        );
+    roomInput.focus();
 
+    return;
 
-      if (!currentChannel) {
+  }
 
-        setStatus(
-          "Please enter a valid prayer room name."
-        );
 
-        return;
+  currentChannel =
+    createChannelName(
+      enteredRoom
+    );
 
-      }
 
+  if (!currentChannel) {
 
-      try {
+    setStatus(
+      "Please enter a valid prayer room name."
+    );
 
-        setStatus(
-          "Connecting to prayer room..."
-        );
+    return;
 
+  }
 
-        document.getElementById(
-          "joinButton"
-        ).disabled = true;
 
+  try {
 
-        /*
-          Create Agora client
-        */
+    setStatus(
+      "Connecting to prayer room..."
+    );
 
-        client =
-          AgoraRTC.createClient({
-            mode: "rtc",
-            codec: "vp8"
-          });
 
+    document.getElementById(
+      "joinButton"
+    ).disabled = true;
 
-        /*
-          Handle remote users publishing audio
-        */
 
-        client.on(
-          "user-published",
-          async (
-            user,
-            mediaType
-          ) => {
+    client =
+      AgoraRTC.createClient({
+        mode: "rtc",
+        codec: "vp8"
+      });
 
-            try {
 
-              await client.subscribe(
-                user,
-                mediaType
-              );
-
-
-              if (
-                mediaType === "audio"
-              ) {
-
-                user.audioTrack.play();
-
-              }
-
-            } catch (error) {
-
-              console.error(
-                "Subscribe error:",
-                error
-              );
-
-            }
-
-          }
-        );
-
-
-        /*
-          Handle users leaving
-        */
-
-        client.on(
-          "user-unpublished",
-          (
-            user,
-            mediaType
-          ) => {
-
-            if (
-              mediaType === "audio"
-            ) {
-
-              removeParticipant(
-                user.uid
-              );
-
-            }
-
-          }
-        );
-
-
-        client.on(
-          "user-left",
-          (
-            user
-          ) => {
-
-            removeParticipant(
-              user.uid
-            );
-
-          }
-        );
-
-
-        /*
-          Connection state
-        */
-
-        client.on(
-          "connection-state-change",
-          (
-            curState,
-            prevState
-          ) => {
-
-            console.log(
-              "Agora connection:",
-              prevState,
-              "→",
-              curState
-            );
-
-
-            const connectionStatus =
-              document.getElementById(
-                "connectionStatus"
-              );
-
-
-            if (
-              curState === "CONNECTED"
-            ) {
-
-              connectionStatus.textContent =
-                "Connected to prayer room";
-
-            }
-
-            else if (
-              curState === "RECONNECTING"
-            ) {
-
-              connectionStatus.textContent =
-                "Reconnecting...";
-
-            }
-
-            else if (
-              curState === "DISCONNECTED"
-            ) {
-
-              connectionStatus.textContent =
-                "Disconnected";
-
-            }
-
-          }
-        );
-
-
-        /*
-          Generate UID
-        */
-
-        currentUid =
-          createUid();
-
-
-        /*
-          Get token from Vercel API
-        */
-
-        const token =
-          await getToken(
-            currentChannel,
-            currentUid
-          );
-
-
-        /*
-          Join Agora channel
-        */
-
-        await client.join(
-          APP_ID,
-          currentChannel,
-          token,
-          currentUid
-        );
-
-
-        /*
-          Create microphone
-        */
-
-        localAudioTrack =
-          await AgoraRTC.createMicrophoneAudioTrack();
-
-
-        /*
-          Publish microphone
-        */
-
-        await client.publish(
-          [localAudioTrack]
-        );
-
-
-        /*
-          Update interface
-        */
-
-        document.getElementById(
-          "joinCard"
-        ).style.display = "none";
-
-
-        document.getElementById(
-          "roomCard"
-        ).style.display = "block";
-
-
-        document.getElementById(
-          "roomTitle"
-        ).textContent =
-          enteredRoom;
-
-
-        document.getElementById(
-          "connectionStatus"
-        ).textContent =
-          "Connected to prayer room";
-
-
-        setStatus(
-          "You are now connected."
-        );
-
-
-        /*
-          Add yourself to participant list
-        */
-
-        addParticipant(
-          currentUid,
-          currentName,
-          true
-        );
-
-
-        /*
-          Get existing remote users
-        */
-
-        client.remoteUsers.forEach(
-          user => {
-
-            addParticipant(
-              user.uid,
-              "Prayer Participant",
-              false
-            );
-
-          }
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Join error:",
-          error
-        );
-
-
-        let message =
-          "Unable to join prayer room.";
-
-
-        if (
-          error &&
-          error.message
-        ) {
-
-          message =
-            error.message;
-
-        }
-
-
-        setStatus(
-          message
-        );
-
-
-        document.getElementById(
-          "joinButton"
-        ).disabled = false;
-
-
-        /*
-          Clean up if joining failed
-        */
+    client.on(
+      "user-published",
+      async (
+        user,
+        mediaType
+      ) => {
 
         try {
 
-          if (localAudioTrack) {
-
-            localAudioTrack.close();
-
-            localAudioTrack = null;
-
-          }
-
-
-          if (client) {
-
-            await client.leave();
-
-            client = null;
-
-          }
-
-        } catch (cleanupError) {
-
-          console.error(
-            cleanupError
+          await client.subscribe(
+            user,
+            mediaType
           );
 
-        }
 
-      }
+          if (
+            mediaType === "audio"
+          ) {
 
-    }
-
-
-    /* =========================================
-       ADD PARTICIPANT
-    ========================================= */
-
-    function addParticipant(
-      uid,
-      name,
-      isSelf = false
-    ) {
-
-      const list =
-        document.getElementById(
-          "participantList"
-        );
-
-
-      const id =
-        "participant-" + uid;
-
-
-      if (
-        document.getElementById(id)
-      ) {
-
-        return;
-
-      }
-
-
-      const li =
-        document.createElement("li");
-
-
-      li.className =
-        "participant";
-
-
-      li.id =
-        id;
-
-
-      const avatar =
-        document.createElement("div");
-
-
-      avatar.className =
-        "participant-avatar";
-
-
-      avatar.textContent =
-        (name || "P")
-          .charAt(0)
-          .toUpperCase();
-
-
-      const nameElement =
-        document.createElement("div");
-
-
-      nameElement.className =
-        "participant-name";
-
-
-      nameElement.textContent =
-        name || "Prayer Participant";
-
-
-      if (isSelf) {
-
-        const badge =
-          document.createElement("span");
-
-
-        badge.className =
-          "you-badge";
-
-
-        badge.textContent =
-          " YOU";
-
-
-        nameElement.appendChild(
-          badge
-        );
-
-      }
-
-
-      li.appendChild(
-        avatar
-      );
-
-
-      li.appendChild(
-        nameElement
-      );
-
-
-      list.appendChild(
-        li
-      );
-
-
-      updateParticipantCount();
-
-    }
-
-
-    /* =========================================
-       REMOVE PARTICIPANT
-    ========================================= */
-
-    function removeParticipant(
-      uid
-    ) {
-
-      const element =
-        document.getElementById(
-          "participant-" + uid
-        );
-
-
-      if (element) {
-
-        element.remove();
-
-      }
-
-
-      updateParticipantCount();
-
-    }
-
-
-    /* =========================================
-       PARTICIPANT COUNT
-    ========================================= */
-
-    function updateParticipantCount() {
-
-      const list =
-        document.getElementById(
-          "participantList"
-        );
-
-
-      const count =
-        list.children.length;
-
-
-      document.getElementById(
-        "participantCount"
-      ).textContent =
-        count;
-
-    }
-
-
-    /* =========================================
-       MUTE / UNMUTE
-    ========================================= */
-
-    async function toggleMute() {
-
-      if (!localAudioTrack) {
-
-        return;
-
-      }
-
-
-      muted =
-        !muted;
-
-
-      await localAudioTrack.setEnabled(
-        !muted
-      );
-
-
-      const button =
-        document.getElementById(
-          "muteButton"
-        );
-
-
-      if (muted) {
-
-        button.textContent =
-          "🎙️ Unmute Microphone";
-
-      } else {
-
-        button.textContent =
-          "🔇 Mute Microphone";
-
-      }
-
-    }
-
-
-    /* =========================================
-       LEAVE ROOM
-    ========================================= */
-
-    async function leaveRoom() {
-
-      try {
-
-        if (localAudioTrack) {
-
-          localAudioTrack.stop();
-
-          localAudioTrack.close();
-
-          localAudioTrack =
-            null;
-
-        }
-
-
-        if (client) {
-
-          await client.leave();
-
-          client = null;
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Leave error:",
-          error
-        );
-
-      }
-
-
-      document.getElementById(
-        "roomCard"
-      ).style.display = "none";
-
-
-      document.getElementById(
-        "joinCard"
-      ).style.display = "block";
-
-
-      document.getElementById(
-        "joinButton"
-      ).disabled = false;
-
-
-      document.getElementById(
-        "participantList"
-      ).innerHTML = "";
-
-
-      document.getElementById(
-        "participantCount"
-      ).textContent = "0";
-
-
-      document.getElementById(
-        "connectionStatus"
-      ).textContent =
-        "Disconnected";
-
-
-      document.getElementById(
-        "muteButton"
-      ).textContent =
-        "🔇 Mute Microphone";
-
-
-      muted = false;
-
-      currentChannel = "";
-
-      currentUid = null;
-
-      setStatus(
-        "You have left the prayer room."
-      );
-
-    }
-
-
-    /* =========================================
-       CLEANUP WHEN PAGE CLOSES
-    ========================================= */
-
-    window.addEventListener(
-      "beforeunload",
-      async () => {
-
-        try {
-
-          if (localAudioTrack) {
-
-            localAudioTrack.stop();
-
-            localAudioTrack.close();
-
-          }
-
-
-          if (client) {
-
-            await client.leave();
+            user.audioTrack.play();
 
           }
 
         } catch (error) {
 
           console.error(
+            "Subscribe error:",
             error
           );
 
@@ -1445,5 +1063,555 @@ content="width=device-width, initial-scale=1.0"
       }
     );
 
-  </script></body>
+
+    client.on(
+      "user-unpublished",
+      (
+        user,
+        mediaType
+      ) => {
+
+        if (
+          mediaType === "audio"
+        ) {
+
+          removeParticipant(
+            user.uid
+          );
+
+        }
+
+      }
+    );
+
+
+    client.on(
+      "user-left",
+      (
+        user
+      ) => {
+
+        removeParticipant(
+          user.uid
+        );
+
+      }
+    );
+
+
+    client.on(
+      "connection-state-change",
+      (
+        curState,
+        prevState
+      ) => {
+
+        console.log(
+          "Agora connection:",
+          prevState,
+          "→",
+          curState
+        );
+
+
+        const connectionStatus =
+          document.getElementById(
+            "connectionStatus"
+          );
+
+
+        if (
+          curState === "CONNECTED"
+        ) {
+
+          connectionStatus.textContent =
+            "Connected to prayer room";
+
+        }
+
+        else if (
+          curState === "RECONNECTING"
+        ) {
+
+          connectionStatus.textContent =
+            "Reconnecting...";
+
+        }
+
+        else if (
+          curState === "DISCONNECTED"
+        ) {
+
+          connectionStatus.textContent =
+            "Disconnected";
+
+        }
+
+      }
+    );
+
+
+    currentUid =
+      createUid();
+
+
+    const token =
+      await getToken(
+        currentChannel,
+        currentUid
+      );
+
+
+    await client.join(
+      APP_ID,
+      currentChannel,
+      token,
+      currentUid
+    );
+
+
+    localAudioTrack =
+      await AgoraRTC.createMicrophoneAudioTrack();
+
+
+    await client.publish(
+      [localAudioTrack]
+    );
+
+
+    document.getElementById(
+      "joinCard"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "roomCard"
+    ).style.display = "block";
+
+
+    document.getElementById(
+      "roomTitle"
+    ).textContent =
+      enteredRoom;
+
+
+    document.getElementById(
+      "connectionStatus"
+    ).textContent =
+      "Connected to prayer room";
+
+
+    setStatus(
+      "You are now connected."
+    );
+
+
+    addParticipant(
+      currentUid,
+      currentName,
+      true
+    );
+
+
+    client.remoteUsers.forEach(
+      user => {
+
+        addParticipant(
+          user.uid,
+          "Prayer Participant",
+          false
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Join error:",
+      error
+    );
+
+
+    let message =
+      "Unable to join prayer room.";
+
+
+    if (
+      error &&
+      error.message
+    ) {
+
+      message =
+        error.message;
+
+    }
+
+
+    setStatus(
+      message
+    );
+
+
+    document.getElementById(
+      "joinButton"
+    ).disabled = false;
+
+
+    try {
+
+      if (localAudioTrack) {
+
+        localAudioTrack.close();
+
+        localAudioTrack = null;
+
+      }
+
+
+      if (client) {
+
+        await client.leave();
+
+        client = null;
+
+      }
+
+    } catch (cleanupError) {
+
+      console.error(
+        cleanupError
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   ADD PARTICIPANT
+===================================================== */
+
+function addParticipant(
+  uid,
+  name,
+  isSelf = false
+) {
+
+  const list =
+    document.getElementById(
+      "participantList"
+    );
+
+
+  const id =
+    "participant-" + uid;
+
+
+  if (
+    document.getElementById(id)
+  ) {
+
+    return;
+
+  }
+
+
+  const li =
+    document.createElement("li");
+
+
+  li.className =
+    "participant";
+
+
+  li.id =
+    id;
+
+
+  const avatar =
+    document.createElement("div");
+
+
+  avatar.className =
+    "participant-avatar";
+
+
+  avatar.textContent =
+    (name || "P")
+      .charAt(0)
+      .toUpperCase();
+
+
+  const nameElement =
+    document.createElement("div");
+
+
+  nameElement.className =
+    "participant-name";
+
+
+  nameElement.textContent =
+    name || "Prayer Participant";
+
+
+  if (isSelf) {
+
+    const badge =
+      document.createElement("span");
+
+
+    badge.className =
+      "you-badge";
+
+
+    badge.textContent =
+      " YOU";
+
+
+    nameElement.appendChild(
+      badge
+    );
+
+  }
+
+
+  li.appendChild(
+    avatar
+  );
+
+
+  li.appendChild(
+    nameElement
+  );
+
+
+  list.appendChild(
+    li
+  );
+
+
+  updateParticipantCount();
+
+}
+
+
+/* =====================================================
+   REMOVE PARTICIPANT
+===================================================== */
+
+function removeParticipant(uid) {
+
+  const element =
+    document.getElementById(
+      "participant-" + uid
+    );
+
+
+  if (element) {
+
+    element.remove();
+
+  }
+
+
+  updateParticipantCount();
+
+}
+
+
+/* =====================================================
+   PARTICIPANT COUNT
+===================================================== */
+
+function updateParticipantCount() {
+
+  const list =
+    document.getElementById(
+      "participantList"
+    );
+
+
+  const count =
+    list.children.length;
+
+
+  document.getElementById(
+    "participantCount"
+  ).textContent =
+    count;
+
+}
+
+
+/* =====================================================
+   MUTE / UNMUTE
+===================================================== */
+
+async function toggleMute() {
+
+  if (!localAudioTrack) {
+
+    return;
+
+  }
+
+
+  muted =
+    !muted;
+
+
+  await localAudioTrack.setEnabled(
+    !muted
+  );
+
+
+  const button =
+    document.getElementById(
+      "muteButton"
+    );
+
+
+  if (muted) {
+
+    button.textContent =
+      "🎙️ Unmute Microphone";
+
+  } else {
+
+    button.textContent =
+      "🔇 Mute Microphone";
+
+  }
+
+}
+
+
+/* =====================================================
+   LEAVE ROOM
+===================================================== */
+
+async function leaveRoom() {
+
+  try {
+
+    if (localAudioTrack) {
+
+      localAudioTrack.stop();
+
+      localAudioTrack.close();
+
+      localAudioTrack =
+        null;
+
+    }
+
+
+    if (client) {
+
+      await client.leave();
+
+      client = null;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Leave error:",
+      error
+    );
+
+  }
+
+
+  document.getElementById(
+    "roomCard"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "joinCard"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "joinButton"
+  ).disabled = false;
+
+
+  document.getElementById(
+    "participantList"
+  ).innerHTML = "";
+
+
+  document.getElementById(
+    "participantCount"
+  ).textContent = "0";
+
+
+  document.getElementById(
+    "connectionStatus"
+  ).textContent =
+    "Disconnected";
+
+
+  document.getElementById(
+    "muteButton"
+  ).textContent =
+    "🔇 Mute Microphone";
+
+
+  muted = false;
+
+  currentChannel = "";
+
+  currentUid = null;
+
+
+  setStatus(
+    "You have left the prayer room."
+  );
+
+}
+
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+window.addEventListener(
+  "beforeunload",
+  async () => {
+
+    try {
+
+      if (localAudioTrack) {
+
+        localAudioTrack.stop();
+
+        localAudioTrack.close();
+
+      }
+
+
+      if (client) {
+
+        await client.leave();
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+);
+
+</script></body>
 </html>
